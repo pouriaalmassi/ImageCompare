@@ -5,6 +5,9 @@ import UniformTypeIdentifiers
 struct ContentView: View {
 	private static let diffDebounce: Duration = .milliseconds(120)
 
+	var initialURLs: [URL] = []
+	@State private var didLoadInitialURLs = false
+
 	@State private var pair             = ImagePair()
 	@State private var mode             = ComparisonMode.swipe
 	@State private var viewport         = Viewport()
@@ -49,6 +52,11 @@ struct ContentView: View {
 			if let importingSide {
 				importTargetSide = importingSide
 			}
+		}
+		.task {
+			guard !didLoadInitialURLs else { return }
+			didLoadInitialURLs = true
+			handleDrop(initialURLs, preferredSide: .left)
 		}
 		.task(id: diffRequest) {
 			await updateDiff()

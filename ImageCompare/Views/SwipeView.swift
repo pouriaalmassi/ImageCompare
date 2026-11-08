@@ -26,9 +26,14 @@ struct SwipeView: View {
 
 			ZStack {
 				canvas(for: left)
+					.mask {
+						SwipeImageRegion(divider: divider, side: .left)
+							.fill(style: FillStyle(eoFill: true))
+					}
 				canvas(for: right)
 					.mask {
-						RightImageRegion(divider: divider)
+						SwipeImageRegion(divider: divider, side: .right)
+							.fill(style: FillStyle(eoFill: true))
 					}
 				line(in: size)
 				handle(.first, in: size)
@@ -111,13 +116,16 @@ struct SwipeView: View {
 	}
 }
 
-/// The part of the view on the right image's side of the divider.
-private nonisolated struct RightImageRegion: Shape {
+/// Complementary masks keep each image on its own side, including when an image
+/// is smaller than the shared canvas or contains transparent pixels.
+private nonisolated struct SwipeImageRegion: Shape {
 	let divider: SwipeDivider
+	let side: ImageSide
 
 	func path(in rect: CGRect) -> Path {
 		let points = divider.rightImageRegion(in: rect.size).map { CGPoint(x: rect.minX + $0.x, y: rect.minY + $0.y) }
 		return Path { path in
+			if case .left = side { path.addRect(rect) }
 			path.addLines(points)
 			path.closeSubpath()
 		}

@@ -3,6 +3,7 @@
 A native macOS app for comparing two images, modeled on Kaleidoscope's image mode.
 
 ## Features
+- Drop two image files onto the Dock icon (or use Finder’s Open With) to open them together in a new comparison. One file opens on the left; additional files beyond the first two are ignored.
 - Load a left and right image by dropping files (two at once fills both sides) or with ⌘O / ⌘⇧O.
 - Four comparison modes (toolbar or ⌥1–⌥4):
   - **Swipe** (default): one view split by a divider. Like Kaleidoscope, each of its two handles can be dragged anywhere along the frame, though never onto the same edge as the other handle. That includes the corner shared with the other handle's edge, which would collapse the line onto the frame. The right image fills the region clockwise from the first handle to the second, so by default (top to bottom) it's on the right. Drag the line to slide it at a fixed angle, with ends moving around corners as needed. Double-click a handle to straighten the divider back to vertical. The geometry lives in `Model/SwipeDivider.swift`.
@@ -35,5 +36,5 @@ A native macOS app for comparing two images, modeled on Kaleidoscope's image mod
 ## Known limitations / possible next steps
 - 100% zoom is one image pixel per *point* (two physical pixels on Retina).
 - No scroll-wheel/two-finger panning yet (needs an NSView bridge); drag to pan.
-- No alignment of shifted or scaled images, no folder comparison, no Finder "Open With".
+- No alignment of shifted or scaled images, no folder comparison.
 - Images are decoded to 8-bit sRGB `CGImage`s, so wide-gamut/HDR differences are reduced to sRGB.
